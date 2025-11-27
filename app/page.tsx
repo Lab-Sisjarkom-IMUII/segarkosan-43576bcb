@@ -61,7 +61,7 @@ export default function Home() {
 
           <div className="flex gap-4">
             <a
-              href="https://github.com/yourusername/SegarKosan"
+              href="https://github.com/SegarKosan/SegarKosan"
               target="_blank"
               rel="noreferrer"
               className="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 hover:text-teal-800 transition-colors"
@@ -102,14 +102,25 @@ export default function Home() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button className="px-8 py-3.5 rounded-full bg-teal-700 text-white font-bold hover:bg-teal-800 transition-all shadow-xl shadow-teal-700/20 flex items-center justify-center gap-2">
+                {/* Tombol ke Login (Internal Link) */}
+                <Link
+                  href="/login"
+                  className="px-8 py-3.5 rounded-full bg-teal-700 text-white font-bold hover:bg-teal-800 transition-all shadow-xl shadow-teal-700/20 flex items-center justify-center gap-2"
+                >
                   <Activity className="w-5 h-5" />
                   Cek Status Udara
-                </button>
-                <button className="px-8 py-3.5 rounded-full bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
+                </Link>
+
+                {/* Tombol ke GitHub (External Link) */}
+                <a
+                  href="https://github.com/SegarKosan/SegarKosan-FrontEnd"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-3.5 rounded-full bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
+                >
                   <Github className="w-5 h-5" />
                   Dokumentasi
-                </button>
+                </a>
               </div>
             </div>
 

@@ -37,7 +37,8 @@ export const useSensorMonitoring = () => {
       return;
     }
 
-    const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:5000";
+    const WS_URL =
+      process.env.NEXT_PUBLIC_WS_URL || "ws://64f5ed0bc73a.ngrok-free.app/";
 
     // 2. Tempel token di URL sebagai query param
     // Hasilnya: ws://localhost:5000?token=eyJhbGci...

@@ -103,16 +103,16 @@ SegarKosan adalah sistem monitoring kualitas udara IoT berbasis **ESP32-C3** yan
 
 ### Frontend (FE - Workspace Ini)
 
-| Layer       | Technology   | Versi   |
-| ----------- | ------------ | ------- |
-| Framework   | Next.js      | 16.0.4  |
-| Runtime     | React        | 19.2.0  |
-| Styling     | TailwindCSS  | 4.x     |
-| Icons       | Lucide React | 0.554.0 |
-| HTTP Client | Axios        | 1.13.2  |
-| JWT         | jwt-decode   | 4.0.0   |
-| PWA         | next-pwa     | 5.6.0   |
-| Language    | TypeScript   | 5.x     |
+| Layer       | Technology   |
+| ----------- | ------------ |
+| Framework   | Next.js      |
+| Runtime     | React        |
+| Styling     | TailwindCSS  |
+| Icons       | Lucide React |
+| HTTP Client | Axios        |
+| JWT         | jwt-decode   | 
+| PWA         | next-pwa     |
+| Language    | TypeScript   |
 
 ### Hardware
 
@@ -159,8 +159,8 @@ Pastikan backend server sudah running:
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/SegarKosan/segarkosan-web.git
-cd segarkosan-web
+git clone https://github.com/SegarKosan/Segarkosan-FrontEnd.git
+cd Segarkosan-FrontEnd
 ```
 
 ### 2. Install Dependencies

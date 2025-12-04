@@ -5,6 +5,7 @@ import axios from "../../lib/api"; // Pastikan path ini benar
 import { setToken } from "../../lib/auth"; // Pastikan path ini benar
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -61,11 +62,36 @@ function LoginForm() {
     }
   };
 
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        setIsLoading(true);
+        const res = await axios.post("/auth/google", {
+          token: tokenResponse.access_token,
+        });
+
+        const { token, user } = res.data.data;
+        setToken(token);
+        if (user) {
+          localStorage.setItem("user", JSON.stringify(user));
+        }
+        router.push("/dashboard");
+      } catch (err: any) {
+        console.error(err);
+        setError(
+          err.response?.data?.message || "Google Login gagal."
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    onError: () => {
+      setError("Google Login Failed");
+    },
+  });
+
   const handleGoogleLogin = () => {
-    // Logika Login Google (misalnya menggunakan Firebase atau NextAuth)
-    alert("Fitur Login Google belum dihubungkan ke Backend.");
-    // Contoh redirect jika menggunakan API backend untuk Google Auth:
-    // window.location.href = "http://localhost:5000/auth/google";
+    googleLogin();
   };
 
   return (

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import axios from "../../lib/api"; // Uncomment untuk penggunaan real
-// import { useRouter } from "next/navigation"; // Uncomment untuk penggunaan real
+import axios from "../../lib/api";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -11,11 +11,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Mock router untuk preview
-  const router = {
-    push: (path: string) => console.log("Navigating to:", path),
-  };
-  // const router = useRouter(); // Gunakan ini di Next.js asli
+  const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,14 +19,6 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      // Simulasi API Call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Simulasi Validasi
-      if (password.length < 6) {
-        throw new Error("Password harus minimal 6 karakter");
-      }
-
       // Kode Asli untuk Backend:
       await axios.post("/auth/register", { name, email, password });
 
@@ -38,10 +26,17 @@ export default function RegisterPage() {
       router.push("/login");
     } catch (err: any) {
       console.error(err);
+      const status = err.response?.status;
+      const message = err.response?.data?.message || err.message;
+
+      // Check if user already exists (usually 409 Conflict or 400 Bad Request with specific message)
+      if (status === 409 || (status === 400 && message.toLowerCase().includes("already"))) {
+        router.push(`/login?email=${encodeURIComponent(email)}&existing=true`);
+        return;
+      }
+
       setError(
-        err.message ||
-          err.response?.data?.message ||
-          "Gagal mendaftar. Coba lagi."
+        message || "Gagal mendaftar. Coba lagi."
       );
     } finally {
       setIsLoading(false);
@@ -64,7 +59,7 @@ export default function RegisterPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-slate-50 font-sans relative">
       {/* Background decoration (Sama dengan Login) */}
-      <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-emerald-50 to-slate-50 -z-10" />
+      <div className="absolute top-0 left-0 w-full h-1/2 bg-linear-to-b from-emerald-50 to-slate-50 -z-10" />
 
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 m-4">
         <div className="p-8">

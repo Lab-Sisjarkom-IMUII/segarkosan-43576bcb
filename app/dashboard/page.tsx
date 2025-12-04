@@ -1,6 +1,7 @@
 "use client";
 
 import { Droplets, Sun, Wind, Thermometer } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useSensorMonitoring } from "./hooks/useSensorMonitoring";
 import Navbar from "./components/Navbar";
 import SkeletonLoader from "./components/SkeletonLoader";
@@ -31,15 +32,17 @@ const getToken = () => {
 };
 
 export default function Dashboard() {
+  const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(true);
 
   useEffect(() => {
     const token = getToken();
     if (!token) {
       console.log("No token found, redirecting...");
-      // Implement redirect logic here usually
+      setTimeout(() => setIsAuthorized(false), 0);
+      router.push("/login");
     }
-  }, []);
+  }, [router]);
 
   const { sensors, latest, loading, isConnected } = useSensorMonitoring();
 

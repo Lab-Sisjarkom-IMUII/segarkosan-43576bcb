@@ -1,17 +1,25 @@
 "use client";
 
-import { Droplets, Sun, Wind, Thermometer } from "lucide-react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import {
+  Droplets,
+  Sun,
+  Wind,
+  Thermometer,
+  LineChart as IconLineChart,
+  Table as IconTable,
+} from "lucide-react";
+
 import { useSensorMonitoring } from "./hooks/useSensorMonitoring";
 import Navbar from "./components/Navbar";
 import SkeletonLoader from "./components/SkeletonLoader";
 import AQIAlert from "./components/AQIAlert";
 import StatCard from "./components/StatCard";
 import HistoryTable from "./components/HistoryTable";
-import OdorGauge from "./components/OdorGauge"; // Pastikan path import benar
-import React, { useEffect, useState } from "react";
+import OdorGauge from "./components/OdorGauge";
+import SensorChart from "./components/SensorChart"; // Import komponen baru
 
-// Definisi Tipe Data Sensor yang Lengkap (Termasuk Odor)
+// Definisi Tipe Data Sensor
 interface SensorData {
   temperature: number;
   humidity: number;
@@ -23,7 +31,6 @@ interface SensorData {
   timestamp: number;
 }
 
-// Mock Token Helper
 const getToken = () => {
   if (typeof window !== "undefined") {
     return localStorage.getItem("token");
@@ -34,6 +41,9 @@ const getToken = () => {
 export default function Dashboard() {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(true);
+
+  // State untuk mengatur tampilan (Chart atau Table)
+  const [viewMode, setViewMode] = useState<"chart" | "table">("chart");
 
   useEffect(() => {
     const token = getToken();
@@ -46,7 +56,6 @@ export default function Dashboard() {
 
   const { sensors, latest, loading, isConnected } = useSensorMonitoring();
 
-  // Casting data 'latest' ke interface SensorData agar properti odor terbaca
   const sensorData = latest as unknown as SensorData;
 
   if (!isAuthorized) return null;
@@ -83,17 +92,15 @@ export default function Dashboard() {
               <AQIAlert co2={latest.co2} timestamp={latest.timestamp} />
             )}
 
-            {/* Grid Layout untuk Cards */}
+            {/* --- Bagian Cards (Statistik) --- */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-              {/* KOLOM 1: Odor Gauge (Utama) */}
+              {/* KOLOM 1: Odor Gauge */}
               <div className="lg:col-span-1">
                 <OdorGauge
-                  // Gunakan Number() untuk memastikan data string dari JSON dikonversi ke angka
                   value={Number(sensorData?.odor_score ?? 0)}
                   min={0}
                   max={100}
                   unit="Index"
-                  // Pass status dan level description dari backend
                   customStatus={sensorData?.odor_status}
                   customLevel={sensorData?.odor_level}
                 />
@@ -101,7 +108,6 @@ export default function Dashboard() {
 
               {/* KOLOM 2: Metric Lainnya */}
               <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6 h-full">
-                {/* Kita pindahkan Suhu ke StatCard biasa karena Gauge dipakai Odor */}
                 <StatCard
                   title="Suhu Ruangan"
                   value={latest?.temperature.toFixed(1) || "-"}
@@ -148,12 +154,56 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Tabel History */}
+            {/* --- Bagian Analisis Data (Chart / Table) --- */}
             <div className="mt-10">
-              <h2 className="text-lg font-bold text-slate-800 mb-4 px-1">
-                Riwayat Data Sensor
-              </h2>
-              <HistoryTable data={sensors} />
+              {/* Header & Toggle Controls */}
+              <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+                <div>
+                  <h2 className="text-xl font-bold text-slate-800">
+                    Analisis Data
+                  </h2>
+                  <p className="text-slate-500 text-sm">
+                    {viewMode === "chart"
+                      ? "Visualisasi tren data sensor seiring waktu."
+                      : "Tabel rinci riwayat data sensor."}
+                  </p>
+                </div>
+
+                {/* Toggle Button Group */}
+                <div className="bg-white p-1 rounded-lg border border-slate-200 flex items-center shadow-sm">
+                  <button
+                    onClick={() => setViewMode("chart")}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      viewMode === "chart"
+                        ? "bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100"
+                        : "text-slate-500 hover:bg-slate-50"
+                    }`}
+                  >
+                    <IconLineChart size={18} />
+                    Grafik
+                  </button>
+                  <button
+                    onClick={() => setViewMode("table")}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      viewMode === "table"
+                        ? "bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100"
+                        : "text-slate-500 hover:bg-slate-50"
+                    }`}
+                  >
+                    <IconTable size={18} />
+                    Riwayat Tabel
+                  </button>
+                </div>
+              </div>
+
+              {/* Conditional Rendering */}
+              <div className="transition-all duration-300 ease-in-out">
+                {viewMode === "chart" ? (
+                  <SensorChart data={sensors as unknown as SensorData[]} />
+                ) : (
+                  <HistoryTable data={sensors as unknown as SensorData[]} />
+                )}
+              </div>
             </div>
           </>
         )}

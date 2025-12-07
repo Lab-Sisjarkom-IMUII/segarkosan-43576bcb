@@ -12,5 +12,5 @@ export default axios.create({
     "Content-Type": "application/json",
   },
   // Opsional: Tambahkan jika backend membutuhkan credentials (cookies)
-  // withCredentials: true,
+  withCredentials: true,
 });

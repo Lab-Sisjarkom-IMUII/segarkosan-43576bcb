@@ -650,8 +650,8 @@ Terima kasih kepada:
 - Lucide React untuk icon set
 - Semua kontributor dan tester
 
----
 
-**Made with ❤️ for better air quality in boarding rooms.**
+## License
 
-Last Updated: January 2025
+© 2025 SegarKosan by Morning Group. All rights reserved.
+

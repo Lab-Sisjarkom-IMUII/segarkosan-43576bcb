@@ -36,7 +36,8 @@ export const useSensorMonitoring = () => {
     }
 
     const WS_URL =
-      process.env.NEXT_PUBLIC_WS_URL
+      process.env.NEXT_PUBLIC_WS_URL ||
+      "wss://segarkosan-v2.testingfothink.my.id/";
 
     const connectWS = () => {
       ws.current = new WebSocket(`${WS_URL}?token=${token}`);

@@ -1,0 +1,11 @@
+{
+  "name": "SegarKosan",
+  "framework": "nextjs",
+  "language": "typescript",
+  "buildCommand": "next build --webpack",
+  "startCommand": "next start",
+  "domain": "segarkosan",
+  "email": "fauzan-basalamah@outlook.com",
+  "secretKey": "imuii_0bfef70a6942e26bc168d1b1a7284a206701f2ea35fce4e3ce2c61c4be7f51de",
+  "repoUrl": "https://github.com/Lab-Sisjarkom-IMUII/segarkosan-43576bcb.git"
+}

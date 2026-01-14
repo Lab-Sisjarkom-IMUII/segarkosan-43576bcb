@@ -1,0 +1,48 @@
+{
+"display_override": ["window-controls-overlay"], 
+"protocol_handlers": [{"protocol":"mailto","url":"/newEmail?to=%s"}], 
+"shortcuts": [
+  {
+    "name": "Start Live Session",
+    "short_name": "Start Live",
+    "description": "Jump direction into starting or joining a live session",
+    "url": "/?startLive",
+    "icons": [
+      {
+        "src": "/images/manifest-icon-512.maskable.png",
+        "sizes": "512x512"
+      }
+    ]
+  }
+], 
+"screenshots": [
+  {
+    "src": "/screenshots/homepage.png",
+    "sizes": "2880x1800",
+    "type": "image/png",
+    "description": "PWABuilder Home Screen"
+  }
+], 
+  "name": "SegarKosan",
+  "short_name": "SegarKosan",
+  "description": "Aplikasi monitoring kualitas udara dan bau kost secara real-time",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#059669",
+  "icons": [
+    {
+      "src": "/images/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "orientation": "portrait"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "SegarKosan",
+  "framework": "nextjs",
+  "language": "typescript",
+  "buildCommand": "next build --webpack",
+  "startCommand": "next start",
+  "domain": "segarkosan",
+  "email": "fauzan-basalamah@outlook.com"
+}

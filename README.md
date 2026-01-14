@@ -1,657 +1,357 @@
-# 🌬️ SegarKosan - Air Quality Monitoring System
 
-SegarKosan adalah sistem monitoring kualitas udara IoT berbasis **ESP32-C3** yang dirancang khusus untuk kamar kost. Aplikasi ini mendeteksi bau, suhu, kelembaban, dan kadar CO2 secara real-time melalui dashboard web yang intuitif.
+<br />
+<div align="center">
+  <a href="https://github.com/SegarKosan">
+    <img src="https://raw.githubusercontent.com/SegarKosan/.github/refs/heads/main/assets/SegarKosan.svg" alt="SegarKosan Logo" width="280">
+  </a>
+  <h1 align="center">SegarKosan</h1>
 
-## 📋 Daftar Isi
+  <p align="center">
+    <strong>Real-time indoor air quality monitoring system for student boarding rooms</strong>
+    <br />
+    <em>Making healthy living spaces accessible through IoT technology</em>
+    <br />
+    <br />
+    <a href="https://github.com/SegarKosan/.github/blob/main/profile/ABOUT-US.MD"><strong>About Us</strong></a>
+    &nbsp;&nbsp;·&nbsp;&nbsp;
+    <a href="https://github.com/SegarKosan/.github/blob/main/profile/ROADMAP.md"><strong>Roadmap</strong></a>
+    &nbsp;&nbsp;·&nbsp;&nbsp;
+    <a href="https://segarkosan.vercel.app"><strong>Live Demo</strong></a>
+    <br />
+    <br />
+    <a href="https://segarkosan.vercel.app">
+      <img alt="Progressive Web App" src="https://raw.githubusercontent.com/SegarKosan/.github/refs/heads/main/assets/pwa-badge.png" height="80px">
+    </a>
+    <a href="https://github.com/SegarKosan/SegarKosan/releases">
+      <img alt="Download from GitHub" src="https://raw.githubusercontent.com/SegarKosan/.github/refs/heads/main/assets/github-badge.png" height="80px">
+    </a>
+  </p>
+  
+  <p align="center">
+    <a href="https://github.com/SegarKosan/SegarKosan">
+      <img src="https://img.shields.io/badge/SegarKosan-Repository-218685?style=for-the-badge&logo=github&logoColor=white" alt="SegarKosan Repo">
+    </a>
+    <a href="https://github.com/SegarKosan/SegarKosan-FrontEnd">
+      <img src="https://img.shields.io/badge/FrontEnd-Repository-7cc48a?style=for-the-badge&logo=github&logoColor=white" alt="FrontEnd Repo">
+    </a>
+    <a href="https://github.com/SegarKosan/SegarKosan-BackEnd">
+      <img src="https://img.shields.io/badge/BackEnd-Repository-000000?style=for-the-badge&logo=github&logoColor=white" alt="BackEnd Repo">
+    </a>
+  </p>
+</div>
 
-- [Fitur Utama](#fitur-utama)
-- [Arsitektur Sistem](#arsitektur-sistem)
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Key Features](#features)
+- [What It Measures](#what-it-measures)
+- [System Architecture](#system-architecture)
+- [Hardware Components](#hardware)
 - [Tech Stack](#tech-stack)
-- [Prasyarat](#prasyarat)
-- [Instalasi](#instalasi)
-- [Konfigurasi](#konfigurasi)
-- [Menjalankan Aplikasi](#menjalankan-aplikasi)
-- [Struktur Proyek](#struktur-proyek)
-- [API & WebSocket](#api--websocket)
-- [Troubleshooting](#troubleshooting)
-- [Kontribusi](#kontribusi)
-- [Lisensi](#lisensi)
+- [Getting Started](#getting-started)
+- [Repository Structure](#repository-structure)
+- [How It Works](#how-it-works)
+- [License](#license)
+- [Contact & Support](#contact--support)
+
+## Overview
+
+**SegarKosan** is an intelligent IoT-based air quality monitoring system specifically designed for Indonesian student boarding rooms (kos-kosan). Poor air quality in densely populated living spaces can lead to health issues, reduced focus, and discomfort. SegarKosan addresses this by providing:
+
+- **Real-time monitoring** of critical air quality parameters
+- **Instant alerts** when conditions become unhealthy
+- **Historical data** to track trends and patterns
+- **Easy-to-understand** odor scoring system
+- **Accessible dashboard** via Progressive Web App (PWA)
+
+Perfect for students, landlords, and property managers who care about creating healthy living environments.
+
+### Problem Statement
+
+Student boarding rooms often suffer from:
+- Poor ventilation leading to CO₂ buildup
+- Humidity issues causing mold and discomfort
+- Unpleasant odors from cooking, trash, or other sources
+- Lack of awareness about indoor air quality
+
+SegarKosan makes invisible air quality visible and actionable.
+
+## What It Measures
+
+| Parameter | Unit | Sensor/Method | Healthy Range |
+|-----------|------|---------------|---------------|
+| **Temperature** | °C | DHT22 | 20-26°C |
+| **Humidity** | % | DHT22 | 40-60% |
+| **Heat Index** | °C | Calculated from temp + humidity | <32°C |
+| **CO₂ Level** | ppm | MQ-135 | <1000 ppm |
+| **Odor Score** | 0-100 | Proprietary algorithm | >70 = Good |
+
+### Odor Score Algorithm
+
+Our proprietary odor scoring system combines multiple factors:
+
+- **40%** - CO₂ concentration (primary indicator)
+- **20%** - Temperature deviation from optimal (24°C)
+- **20%** - Humidity level
+- **20%** - Raw MQ-135 sensor reading
+
+**Score Interpretation:**
+- 🟢 **80-100**: Excellent air quality
+- 🟡 **60-79**: Good, minor improvements possible
+- 🟠 **40-59**: Moderate, ventilation recommended
+- 🔴 **0-39**: Poor, immediate action needed
+
+##  Features
+
+### Device Features
+- ** Real-time Monitoring**: Sensor readings every ~5 seconds with minimal latency
+- ** WiFi Provisioning**: Easy setup via captive portal (WiFiManager)
+- ** OLED Display**: 5-page rotating display showing all parameters
+- ** Auto-reconnect**: Robust MQTT connection with automatic recovery
+- ** Low Power**: Optimized for 24/7 operation on ESP32-C3
+
+### Web Dashboard Features
+- ** Progressive Web App (PWA)**: Install on any device like a native app
+- ** Real-time Gauges**: Live visualization of all sensor data
+- ** JWT Authentication**: Secure user sessions
+- ** WebSocket Updates**: Instant data push without polling
+- ** Historical Charts**: Track trends over time (coming soon)
+- ** Smart Alerts**: Notifications when thresholds are exceeded (coming soon)
+- ** Dark Mode**: Easy on the eyes for night-time monitoring
+
+### Technical Features
+- **MQTT Protocol**: Industry-standard IoT messaging
+- **WebSocket Bridge**: Real-time browser updates
+- **RESTful API**: For integration with other services
+- **Modular Architecture**: Separate firmware, backend, and frontend
+- **Open Hardware**: Complete schematics and BOM available
+
+## Hardware
+
+### Bill of Materials (BOM)
+
+| Component | Model | Specification | Pin Connection | Approx. Cost |
+|-----------|-------|---------------|----------------|--------------|
+| **Microcontroller** | ESP32-C3 DevKitC-02 | 160MHz RISC-V, WiFi, BLE | — | $5-7 |
+| **Temp/Humidity** | DHT22 (AM2302) | ±0.5°C, ±2% RH | GPIO 4 | $3-5 |
+| **Gas Sensor** | MQ-135 | Air quality (CO₂, NH₃, NOx) | GPIO 2 (ADC1_CH2) | $2-4 |
+| **Display** | SH1106 OLED | 128×64 I2C monochrome | SCL→GPIO8, SDA→GPIO10 | $3-5 |
+| **Power** | USB-C Cable | 5V @ 500mA minimum | — | $2-3 |
+
+**Total Cost:** ~$15-24 USD per device
+
+### Important Notes
+
+- **MQ-135 Power**: Requires 5V! Connect to `VIN` or `5V` pin, **NOT** 3.3V, or the sensor won't heat properly.
+- **MQ-135 Warm-up**: Needs 24-48 hours of initial burn-in for accurate readings.
+- **DHT22 Pullup**: Some modules include built-in resistor; if not, add 10kΩ pullup to data pin.
+- **I2C Address**: SH1106 typically uses 0x3C; verify with I2C scanner if display doesn't work.
+
+### Assembly Tips
+
+1. Start with ESP32-C3 and OLED to verify basic functionality
+2. Add DHT22 and test temperature/humidity readings
+3. Add MQ-135 last (requires calibration and warm-up)
+4. Use breadboard for prototyping, then solder to perfboard or design custom PCB
+5. 3D-printable enclosure design available in hardware repository
+
+## System Architecture
+
+### Ecosystem Overview
+![Ecosystem Architecture](https://raw.githubusercontent.com/SegarKosan/.github/refs/heads/main/assets/ecosystem-architecture.png)
+
+### IoT Device Architecture
+![IoT Architecture](https://raw.githubusercontent.com/SegarKosan/.github/refs/heads/main/assets/IOT-architecture.png)
+
+## Data Flow
+
+1. ESP32-C3 reads sensors every 5 seconds
+2. Publishes JSON payload to MQTT broker
+3. Backend receives MQTT messages
+4. Backend broadcasts to authenticated WebSocket clients
+5. Dashboard updates gauges in real-time
+
+## Tech Stack
+
+### Firmware (IoT Device)
+- **Platform**: ESP32-C3 (RISC-V)
+- **Framework**: Arduino Core for ESP32
+- **Build System**: PlatformIO
+- **Libraries**: WiFiManager, PubSubClient (MQTT), DHT sensor library, Adafruit GFX
+
+### Backend
+- **Runtime**: Node.js (v18+)
+- **Framework**: Express.js
+- **Protocols**: MQTT (Mosquitto), WebSocket (ws)
+- **Authentication**: JWT (jsonwebtoken)
+- **Database**: (Planned: MongoDB/PostgreSQL for historical data)
+
+### Frontend
+- **Framework**: Next.js 14 (React 18)
+- **Language**: TypeScript
+- **UI Library**: TailwindCSS + shadcn/ui
+- **Charts**: Recharts / Chart.js
+- **State Management**: React Context / Zustand
+- **PWA**: next-pwa plugin
+- **Deployment**: Vercel
+
+
+
+### Roadmap
+
+Check out our [Project Roadmap](https://github.com/SegarKosan/.github/blob/main/profile/ROADMAP.md) to see what we're working on next!
 
 ---
 
-## 🎯 Fitur Utama
+## Getting Started
 
-### 1. **Odor Score Calculation (0-100)**
+### Quick Start (For Users)
 
-- Algoritma pintar mengkonversi data sensor menjadi skor kualitas udara
-- Kategori: Fresh (0-30), Good (31-50), Moderate (51-70), Poor (71-90), Critical (91-100)
-- Status visual dengan warna dan ikon yang mudah dipahami
+1. **Access the Dashboard**: Visit [segarkosan.vercel.app](https://segarkosan.vercel.app)
+2. **Install as PWA**: Click "Install" button in your browser
+3. **Create Account**: Sign up with email/password
+4. **Connect Device**: Follow on-screen instructions to pair your SegarKosan device
 
-### 2. **Monitoring Real-time**
+### Developer Setup
 
-- Dashboard live dengan update WebSocket
-- Tampilan gauge untuk Odor Score
-- Stat cards untuk Suhu, Kelembaban, Heat Index, CO2
-- Koneksi status indicator
+Each component has its own repository with detailed setup instructions:
 
-### 3. **Riwayat Data & Tabel History**
-
-- Menyimpan hingga 10 data terakhir
-- Format waktu terstandar (HH:MM:SS)
-- Tampilan responsive untuk mobile dan desktop
-
-### 4. **Smart Alerts**
-
-- Notifikasi otomatis saat kondisi tidak normal
-- Alert untuk Odor Score ≥ 75, Kelembaban tinggi, Suhu ekstrem
-- Peringatan CO2 > 1000 ppm
-
-### 5. **Dual Connectivity**
-
-- **MQTT**: Real-time data streaming yang ringan
-- **HTTP REST API**: Kompatibilitas luas dan fallback
-
-### 6. **PWA Support**
-
-- Installable di smartphone sebagai native app
-- Offline support (dengan limitations)
-- Auto-update pada versi baru
-
----
-
-## 🏗️ Arsitektur Sistem
-
-```
-┌─────────────────────┐
-│   SENSING LAYER     │
-│  DHT22 + MQ-135     │
-│  (Suhu/Lembab/Gas)  │
-└──────────┬──────────┘
-           │
-┌──────────▼──────────┐
-│ PROCESSING LAYER    │
-│   ESP32-C3 + OLED   │
-│  (Odor Algorithm)   │
-└──────────┬──────────┘
-           │ (WiFi)
-     (HTTP/MQTT)
-           │
-┌──────────▼──────────────────────────┐
-│    NETWORK & BACKEND LAYER          │
-│  Express.js Server + MongoDB        │
-│  WebSocket + Authentication (JWT)   │
-└──────────┬───────────────────────────┘
-           │
-┌──────────▼──────────┐
-│ APPLICATION LAYER   │
-│  Next.js React App  │
-│  TailwindCSS UI     │
-└─────────────────────┘
-```
-
-### Data Flow
-
-1. **ESP32-C3** membaca sensor setiap 2-5 detik
-2. **Memproses** data mentah → skor bau & heat index
-3. **Mengirim** via MQTT atau HTTP ke backend
-4. **Backend** menyimpan di MongoDB + broadcast via WebSocket
-5. **Frontend** menerima update real-time → render dashboard
-
----
-
-## 🛠️ Tech Stack
-
-### Frontend (FE - Workspace Ini)
-
-| Layer       | Technology   |
-| ----------- | ------------ |
-| Framework   | Next.js      |
-| Runtime     | React        |
-| Styling     | TailwindCSS  |
-| Icons       | Lucide React |
-| HTTP Client | Axios        |
-| JWT         | jwt-decode   | 
-| PWA         | next-pwa     |
-| Language    | TypeScript   |
-
-### Hardware
-
-| Komponen        | Model       | Catatan              |
-| --------------- | ----------- | -------------------- |
-| Microcontroller | ESP32-C3    | RISC-V, WiFi, 160MHz |
-| Temp/Humidity   | DHT22       | Akurasi ±2% RH       |
-| Gas/Odor        | MQ-135      | Ppm untuk CO2/Bau    |
-| Display         | SH1106 OLED | 128x64, I2C          |
-
-### Backend (Separate Repository)
-
-- **Runtime**: Node.js (Express.js)
-- **Database**: MongoDB
-- **Real-time**: WebSocket + Socket.io
-- **Authentication**: JWT
-
----
-
-## 📦 Prasyarat
-
-### Minimum Requirements
-
-- **Node.js**: v18.0.0 atau lebih baru
-- **npm**: v9.0.0 atau lebih baru (atau yarn/pnpm)
-- **Git**: untuk version control
-
-### Development Tools (Opsional)
-
-- **VS Code**: Rekomendasi editor
-- **Docker**: Untuk menjalankan backend lokal
-
-### Backend Service
-
-Pastikan backend server sudah running:
-
-- **URL Default**: `http://localhost:5000`
-- **WebSocket URL**: `ws://localhost:5000`
-
----
-
-## 🚀 Instalasi
-
-### 1. Clone Repository
+#### 1.1️ Firmware (ESP32-C3)
+**Repository**: [SegarKosan/SegarKosan](https://github.com/SegarKosan/SegarKosan)
 
 ```bash
-git clone https://github.com/SegarKosan/Segarkosan-FrontEnd.git
-cd Segarkosan-FrontEnd
+# Clone and setup
+git clone https://github.com/SegarKosan/SegarKosan.git
+cd SegarKosan
+pio run --target upload
 ```
 
-### 2. Install Dependencies
+**Prerequisites**: PlatformIO IDE, ESP32-C3 board, USB-C cable
+
+#### 2️2. Backend (Node.js)
+**Repository**: [SegarKosan/SegarKosan-BackEnd](https://github.com/SegarKosan/SegarKosan-BackEnd)
 
 ```bash
+# Clone and setup
+git clone https://github.com/SegarKosan/SegarKosan-BackEnd.git
+cd SegarKosan-BackEnd
 npm install
-# atau
-yarn install
-# atau
-pnpm install
-```
-
-### 3. Setup Environment Variables
-
-Buat file `.env.local` di root project:
-
-```env
-# Backend API Configuration
-NEXT_PUBLIC_API_URL=http://localhost:5000
-NEXT_PUBLIC_WS_URL=ws://localhost:5000
-
-# (Optional) Analytics atau service eksternal lainnya
-# NEXT_PUBLIC_GA_ID=...
-```
-
-**Catatan**: Variable dengan prefix `NEXT_PUBLIC_` akan tersedia di browser. Jangan letakkan secret key di sini.
-
----
-
-## ⚙️ Konfigurasi
-
-### PWA Configuration
-
-Edit [`next.config.ts`](next.config.ts):
-
-```typescript
-const withPWA = withPWAInit({
-  dest: "public", // Output folder untuk service worker
-  register: true, // Auto-register service worker
-  skipWaiting: true, // Update otomatis tanpa prompt
-  disable: false, // Set true untuk disable PWA di dev
-});
-```
-
-### TailwindCSS Setup
-
-File [`app/globals.css`](app/globals.css) sudah include Tailwind imports:
-
-```css
-@import "tailwindcss";
-```
-
-### TypeScript Configuration
-
-Lihat [`tsconfig.json`](tsconfig.json) untuk compiler options:
-
-- Target: ES2017
-- Module Resolution: Node
-- Strict: false (relax untuk development)
-
----
-
-## 📖 Menjalankan Aplikasi
-
-### Development Server
-
-```bash
 npm run dev
-# Server berjalan di http://localhost:3000
 ```
 
-Fitur development:
+**Prerequisites**: Node.js v18+, MQTT broker (Mosquitto)
 
-- Hot reload on file changes
-- Error overlay dengan stack trace
-- Built-in Next.js optimizations
-
-### Build untuk Production
+#### 3️3. Frontend (Next.js)
+**Repository**: [SegarKosan/SegarKosan-FrontEnd](https://github.com/SegarKosan/SegarKosan-FrontEnd)
 
 ```bash
-npm run build
-npm start
+# Clone and setup
+git clone https://github.com/SegarKosan/SegarKosan-FrontEnd.git
+cd SegarKosan-FrontEnd
+npm install
+npm run dev
 ```
 
-### Linting & Code Quality
+**Prerequisites**: Node.js v18+
 
-```bash
-npm run lint
-# Check code dengan ESLint (Next.js + TypeScript rules)
-```
-
-### Testing (Opsional Setup)
-
-Saat ini belum ada test framework yang dikonfigurasi. Untuk menambahkan Jest:
-
-```bash
-npm install --save-dev jest @testing-library/react
-```
-
----
-
-## 📁 Struktur Proyek
+### Repository Structure
 
 ```
-segarkosan-web/
-├── app/                           # Next.js App Router
-│   ├── layout.tsx                 # Root layout + metadata
-│   ├── page.tsx                   # Landing page (/)
-│   ├── globals.css                # Global styles
-│   ├── login/
-│   │   └── page.tsx               # Login form
-│   ├── register/
-│   │   └── page.tsx               # Register form
-│   ├── dashboard/
-│   │   ├── page.tsx               # Main dashboard (/dashboard)
-│   │   ├── utils.ts               # Helper functions & types
-│   │   ├── hooks/
-│   │   │   └── useSensorMonitoring.tsx  # WebSocket + HTTP hook
-│   │   └── components/
-│   │       ├── Navbar.tsx         # Top navigation
-│   │       ├── StatCard.tsx       # Reusable stat display card
-│   │       ├── OdorGauge.tsx      # Circular gauge untuk Odor Score
-│   │       ├── AQIAlert.tsx       # Alert banner untuk kualitas udara
-│   │       ├── HistoryTable.tsx   # Tabel data historis
-│   │       └── SkeletonLoader.tsx # Loading placeholder
-│   └── components/
-│       └── SWRegister.tsx         # Service Worker registration
+SegarKosan (Organization)
+├── SegarKosan/              # 🔧 ESP32-C3 firmware (PlatformIO)
+│   ├── src/                 # Source code
+│   ├── include/             # Headers
+│   ├── platformio.ini       # Build configuration
+│   └── README.md
 │
-├── lib/                           # Utility functions & configs
-│   ├── api.ts                     # Axios instance + base URL
-│   └── auth.ts                    # Token management (localStorage)
+├── SegarKosan-BackEnd/      # 🖥️ Node.js server
+│   ├── src/
+│   │   ├── mqtt/            # MQTT client
+│   │   ├── websocket/       # WebSocket server
+│   │   ├── auth/            # JWT authentication
+│   │   └── server.js        # Entry point
+│   ├── package.json
+│   └── README.md
 │
-├── styles/                        # (Empty - styles via TailwindCSS)
+├── SegarKosan-FrontEnd/     # 🌐 Next.js dashboard
+│   ├── app/                 # App router
+│   ├── components/          # React components
+│   ├── lib/                 # Utilities
+│   ├── public/              # Static assets
+│   ├── package.json
+│   └── README.md
 │
-├── public/                        # Static assets
-│   ├── manifest.json              # PWA manifest
-│   ├── sw.js                      # Service Worker (auto-generated)
-│   └── images/
-│       └── segarkosan_logo.png    # Logo
-│
-├── .next/                         # Build output (git-ignored)
-├── node_modules/                  # Dependencies (git-ignored)
-│
-├── Config Files
-├── .gitignore                     # Git ignore rules
-├── tsconfig.json                  # TypeScript config
-├── next.config.ts                 # Next.js config
-├── next-pwa.d.ts                  # PWA type definitions
-├── postcss.config.mjs             # PostCSS config (TailwindCSS)
-├── eslint.config.mjs              # ESLint rules
-├── package.json                   # Dependencies & scripts
-└── README.md                      # This file
+└── .github/                 # 📚 Organization profile (this repo)
+    ├── profile/
+    │   ├── README.md        # This file
+    │   ├── ABOUT-US.MD
+    │   └── ROADMAP.md
+    └── assets/              # Diagrams and images
 ```
 
-### Key Files Explanation
-
-| File                                                                                         | Purpose                                     |
-| -------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| [`app/dashboard/page.tsx`](app/dashboard/page.tsx)                                           | Main dashboard component dengan grid layout |
-| [`app/dashboard/hooks/useSensorMonitoring.tsx`](app/dashboard/hooks/useSensorMonitoring.tsx) | WebSocket connection + data handling        |
-| [`app/dashboard/components/OdorGauge.tsx`](app/dashboard/components/OdorGauge.tsx)           | Circular gauge visualization                |
-| [`lib/api.ts`](lib/api.ts)                                                                   | Axios client dengan base URL                |
-| [`lib/auth.ts`](lib/auth.ts)                                                                 | Token storage helpers                       |
-| [`next.config.ts`](next.config.ts)                                                           | PWA + Next.js configuration                 |
-
----
-
-## 🔌 API & WebSocket
-
-### WebSocket Connection
-
-**Location**: [`app/dashboard/hooks/useSensorMonitoring.tsx`](app/dashboard/hooks/useSensorMonitoring.tsx)
-
-#### Connection String
-
-```
-ws://localhost:5000?token={JWT_TOKEN}
-```
-
-#### Message Format (Backend → Frontend)
-
-```json
-{
-  "type": "sensor_data",
-  "payload": {
-    "temperature": 28.5,
-    "humidity": 65.0,
-    "heat_index": 31.2,
-    "co2": 450,
-    "odor_score": 12,
-    "odor_status": "Fresh",
-    "odor_level": "Udara segar, aman untuk beraktivitas"
-  }
-}
-```
-
-### HTTP REST API
-
-#### Login Endpoint
-
-```
-POST /auth/login
-Content-Type: application/json
-
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
-
-Response:
-{
-  "data": {
-    "token": "eyJhbGci...",
-    "user": {
-      "id": "user_123",
-      "name": "John Doe",
-      "email": "user@example.com"
-    }
-  }
-}
-```
-
-#### Register Endpoint
-
-```
-POST /auth/register
-Content-Type: application/json
-
-{
-  "name": "John Doe",
-  "email": "user@example.com",
-  "password": "password123"
-}
-```
-
-#### Get Sensors Data
-
-```
-GET /sensors
-Authorization: Bearer {JWT_TOKEN}
-
-Response: Array<SensorData>
-```
-
-### Authentication
-
-Token disimpan di `localStorage`:
-
-```typescript
-// Set token setelah login
-setToken(token);
-
-// Get token untuk request
-const token = getToken();
-
-// Remove token setelah logout
-removeToken();
-```
-
----
-
-## 🎨 UI Components Reference
-
-### StatCard
-
-Display metric dengan icon dan unit.
-
-```tsx
-<StatCard
-  title="Suhu Ruangan"
-  value={28.5}
-  unit="°C"
-  icon={Thermometer}
-  colorClass="text-orange-600"
-  bgClass="bg-orange-50"
-  statusMessage="Suhu Aktual"
-/>
-```
-
-### OdorGauge
-
-Circular gauge untuk Odor Score (0-100).
-
-```tsx
-<OdorGauge
-  value={45}
-  min={0}
-  max={100}
-  unit="Index"
-  customStatus="Good"
-  customLevel="Ventilasi mungkin diperlukan"
-/>
-```
-
-### AQIAlert
-
-Banner alert untuk status kualitas udara.
-
-```tsx
-<AQIAlert co2={450} timestamp={Date.now()} />
-```
-
-### HistoryTable
-
-Tabel dengan riwayat 10 data terakhir.
-
-```tsx
-<HistoryTable data={sensorArray} />
-```
-
----
-
-## 🔧 Troubleshooting
-
-### Issue: WebSocket Connection Refused
-
-**Penyebab**: Backend server tidak running atau URL salah
-**Solusi**:
-
-1. Pastikan backend server di `http://localhost:5000`
-2. Cek environment variable `NEXT_PUBLIC_WS_URL`
-3. Pastikan token valid dan ada di localStorage
-
-```bash
-# Backend default
-npm run dev  # di folder backend
-```
-
-### Issue: "No token found, skipping connection"
-
-**Penyebab**: User belum login atau token expired
-**Solusi**:
-
-1. Login terlebih dahulu di `/login`
-2. Token akan disimpan otomatis di localStorage
-3. Refresh halaman untuk reconnect
-
-### Issue: CORS Error
-
-**Penyebab**: Backend CORS settings tidak allow frontend URL
-**Solusi**:
-Update backend Express CORS middleware:
-
-```javascript
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
-```
-
-### Issue: PWA Service Worker Not Registering
-
-**Penyebab**: Browser tidak support atau path `/sw.js` tidak found
-**Solusi**:
-
-1. Clear browser cache
-2. Jalankan `npm run build` terlebih dahulu
-3. Cek console untuk error messages
-
----
-
-## 📱 Mobile & Responsive Design
-
-Aplikasi sudah dioptimasi untuk:
-
-- ✅ Desktop (1024px+)
-- ✅ Tablet (768px - 1024px)
-- ✅ Mobile (320px - 768px)
-
-Menggunakan Tailwind's responsive breakpoints:
-
-```tsx
-className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4";
-```
-
----
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-
-# Production
-vercel --prod
-```
-
-**Environment Variables di Vercel**:
-
-```
-NEXT_PUBLIC_API_URL=https://backend-api.example.com
-NEXT_PUBLIC_WS_URL=wss://backend-api.example.com
-```
-
-### Docker (Self-hosted)
-
-Buat `Dockerfile`:
-
-```dockerfile
-FROM node:18-alpine
-
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-
-COPY . .
-RUN npm run build
-
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
-Build & run:
-
-```bash
-docker build -t segarkosan-web .
-docker run -p 3000:3000 -e NEXT_PUBLIC_API_URL=... segarkosan-web
-```
-
----
-
-## 📊 Performance Tips
-
-1. **Image Optimization**: Gunakan `next/image` untuk gambar
-2. **Code Splitting**: Next.js auto-split routes
-3. **Lazy Loading**: Gunakan `dynamic()` untuk heavy components
-4. **Bundle Analysis**: `npm run build` menampilkan bundle info
-
----
-
-## 🤝 Kontribusi
-
-Kami menerima kontribusi!
-
-1. **Fork** repository ini
-2. **Create** feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** changes (`git commit -m 'Add amazing feature'`)
-4. **Push** ke branch (`git push origin feature/amazing-feature`)
-5. **Open Pull Request** dengan deskripsi lengkap
-
-### Development Guidelines
-
-- Ikuti code style: ESLint config
-- Gunakan TypeScript strictly
-- Test di multiple screen sizes
-- Dokumentasi untuk fitur baru
-
----
-
-## 📄 Lisensi
-
-Project ini dilisensikan di bawah **MIT License** - lihat file [LICENSE](LICENSE) untuk detail lengkap.
-
----
-
-## 👥 Tim
-
-**SegarKosan Team**
-
-- Hardware Engineer: [Kontributor Hardware]
-- Frontend Developer: [Kontributor FE]
-- Backend Developer: [Kontributor BE]
-
----
-
-## 📞 Support & Contact
-
-- **Issues**: [GitHub Issues](https://github.com/SegarKosan/segarkosan-web/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/SegarKosan/segarkosan-web/discussions)
-- **Email**: support@segarkosan.example.com
-
----
-
-## 🙏 Acknowledgments
-
-Terima kasih kepada:
-
-- Next.js dan React community
-- TailwindCSS untuk utility-first CSS
-- Lucide React untuk icon set
-- Semua kontributor dan tester
+## How It Works
+
+### Device Operation Cycle
+
+1. **Initialization** (on boot)
+   - Connect to WiFi (or start captive portal)
+   - Initialize sensors and OLED
+   - Connect to MQTT broker
+
+2. **Main Loop** (every ~5 seconds)
+   - Read DHT22 (temperature, humidity)
+   - Read MQ-135 (gas sensor ADC value)
+   - Calculate heat index
+   - Calculate odor score
+   - Update OLED display
+   - Publish JSON to MQTT topic
+
+3. **Data Format** (MQTT payload)
+   ```json
+   {
+     "deviceId": "ESP32-C3-ABC123",
+     "timestamp": 1703596800,
+     "temperature": 25.4,
+     "humidity": 58.2,
+     "heatIndex": 26.1,
+     "co2": 687,
+     "odorScore": 78,
+     "rawGas": 342
+   }
+   ```
+
+### Backend Processing
+
+1. Subscribe to MQTT topic(s)
+2. Validate incoming data
+3. (Optional) Store in database
+4. Broadcast to authenticated WebSocket clients
+5. Apply business logic (alerts, thresholds)
+
+### Frontend Rendering
+
+1. Establish WebSocket connection with JWT
+2. Receive real-time sensor updates
+3. Update gauge components
+4. Show alerts if thresholds exceeded
+5. Persist state in localStorage
 
 
 ## License
 
-© 2025 SegarKosan by Morning Group. All rights reserved.
+© 2025 SegarKosan by **Morning Group**. All rights reserved.
 
+This project is proprietary software. Unauthorized copying, distribution, or modification is prohibited without explicit written permission from the copyright holders.
+
+For licensing inquiries, please contact us.
+
+---
+
+<div align="center">
+  <p><strong>Made with Passion by Morning Group for healthier student living spaces</strong></p>
+  <p>
+    <a href="#overview">Back to Top ↑</a>
+  </p>
+</div>
